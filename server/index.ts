@@ -5,6 +5,15 @@ import FastifyVite from '@fastify/vite'
 import { apiRoutes } from './routes/index.ts'
 import { buildServices } from './services.ts'
 
+/**
+ * The key can arrive three ways, in this order of precedence:
+ *   npm run dev -- --key=AI...     (nothing to create, nothing to edit)
+ *   GEMINI_API_KEY=AI... npm run dev
+ *   a .env file, if you would rather keep it around
+ */
+const keyArg = process.argv.find((a) => a.startsWith('--key='))
+if (keyArg) process.env.GEMINI_API_KEY = keyArg.slice('--key='.length)
+
 const rootDir = dirname(dirname(fileURLToPath(import.meta.url)))
 const dev = process.argv.includes('--dev') || process.env.NODE_ENV !== 'production'
 // 3539 = FLEX on a phone keypad. Deliberately off the common 3000/5173/8080 lanes.
@@ -36,7 +45,7 @@ console.log(
     `  UI    → http://localhost:${port}/ui`,
     `  API   → http://localhost:${port}/api`,
     `  model → ${services.meta.model}`,
-    `  key   → ${services.meta.hasApiKey ? 'present' : 'MISSING — set GEMINI_API_KEY'}`,
+    `  key   → ${services.meta.hasApiKey ? 'present' : 'MISSING — pass --key=… or set GEMINI_API_KEY'}`,
     `  pool  → ${services.meta.poolSize} profiles`,
     '',
   ].join('\n'),

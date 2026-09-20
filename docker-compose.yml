@@ -1,0 +1,19 @@
+services:
+  flexipal:
+    build: .
+    image: flexipal
+    ports:
+      - "${PORT:-3539}:3539"
+    environment:
+      # Required. Read from your shell or from a .env file beside this one.
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?set GEMINI_API_KEY in .env or your shell}
+      # Optional overrides; the defaults are in .env.example.
+      GEMINI_MODEL: ${GEMINI_MODEL:-}
+      LLM_TIMEOUT_MS: ${LLM_TIMEOUT_MS:-}
+    volumes:
+      # Search history survives a container restart.
+      - flexipal-data:/data
+    restart: unless-stopped
+
+volumes:
+  flexipal-data:

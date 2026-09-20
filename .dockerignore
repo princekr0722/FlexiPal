@@ -1,0 +1,19 @@
+node_modules
+dist
+data
+.git
+.env
+.env.*
+!.env.example
+*.db
+*.db-*
+*.sqlite*
+*.log
+.DS_Store
+.vscode
+.idea
+# assignment material and working notes, not part of the image
+*.pdf
+requirement.md
+progress.md
+Plan.md
