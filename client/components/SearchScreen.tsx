@@ -3,6 +3,7 @@ import { Button } from './primitives.tsx'
 import { Logo } from './Logo.tsx'
 import { useVocabulary } from '../hooks/useVocabulary.ts'
 import { detect, detectedCount } from '../lib/detect.ts'
+import { AmbientBackground } from './AmbientBackground.tsx'
 
 const EXAMPLES = [
   'RDS developers with 4-7 years of experience who have worked at startups, for a role based in Bangalore',
@@ -19,15 +20,12 @@ export function SearchScreen({ onSubmit, busy }: { onSubmit: (q: string) => void
   const canSubmit = value.trim().length >= 3 && !busy
 
   return (
-    <div className="relative mx-auto flex min-h-full max-w-2xl flex-col justify-center px-4 py-16">
-      {/* A slow, barely-there wash behind the headline. */}
-      <div
-        aria-hidden
-        className="animate-drift pointer-events-none absolute -top-12 left-1/2 -z-10 size-[28rem] -translate-x-1/2 rounded-pill bg-accent/25 blur-3xl"
-      />
+    <div className="relative min-h-full overflow-hidden">
+      <AmbientBackground />
 
-      <div className="animate-rise">
-        <Logo className="mb-7 h-9 w-auto" />
+      <div className="relative z-10 mx-auto flex min-h-full max-w-2xl flex-col justify-center px-4 py-16">
+      <div className="animate-rise mb-7">
+        <Logo className="h-8 w-auto sm:h-9" />
       </div>
 
       <h1 className="animate-rise font-heading text-5xl leading-tight text-primary" style={{ animationDelay: '60ms' }}>
@@ -119,6 +117,7 @@ export function SearchScreen({ onSubmit, busy }: { onSubmit: (q: string) => void
             </button>
           ))}
         </div>
+      </div>
       </div>
     </div>
   )

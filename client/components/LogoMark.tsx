@@ -1,0 +1,24 @@
+/**
+ * The compact mark: Flexiple's F, their star as the separator, and a P cut to
+ * the same cap height and stem weight. Used where the full wordmark does not
+ * earn its width — small screens, and the favicon, which is this same artwork.
+ */
+export function LogoMark({ className = 'size-7' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="FlexiPal">
+      <rect width="64" height="64" rx="14" className="fill-primary" />
+
+      <g transform="translate(9 17) scale(1.8) translate(-0.892 -4.908)" fill="#ffffff">
+        <path d="M8.01413 4.90822H10.1624V7.16043H8.01413C7.77602 7.15805 7.53982 7.20302 7.31936 7.29271C7.09891 7.3824 6.89863 7.51501 6.73025 7.68278C6.56187 7.85054 6.42877 8.05009 6.33875 8.26974C6.24873 8.48939 6.2036 8.72473 6.20599 8.96197V10.0893H10.1624V12.3415H6.20599V20.9032H3.94552V12.3415H0.892578V10.0893H3.94552V8.96197C3.94411 8.42923 4.04838 7.90146 4.25234 7.409C4.45631 6.91654 4.75594 6.46909 5.13403 6.09239C5.51212 5.71568 5.9612 5.41713 6.45547 5.21391C6.94973 5.01069 7.47944 4.90681 8.01413 4.90822Z" />
+      </g>
+
+      <g transform="translate(27.7 9) scale(1.3) translate(-40.226 -0.661)" className="fill-accent">
+        <path d="M46.6631 6.08952L46.1582 5.39745L44.553 4.25826L44.5756 4.19048L46.5318 4.25469L47.3481 3.9907L46.6738 1.92399L45.8574 2.18798L44.3214 3.36998L44.2641 3.32836L44.8788 1.51612V0.661133H42.6983V1.51612L43.3392 3.33192L43.2807 3.37473L41.716 2.18798L40.8997 1.92399L40.2266 3.9907L41.0429 4.25469L42.999 4.19999L43.0217 4.26777L41.4153 5.39745L40.9116 6.08952L42.6756 7.36665L43.1804 6.67577L43.7509 4.80407H43.8225L44.3823 6.72333L44.6055 7.02894L44.8955 7.36903L46.6631 6.08952Z" />
+      </g>
+
+      <g transform="translate(38.7 17) scale(0.9)" className="fill-accent">
+        <path fillRule="evenodd" d="M0 0 H9 A9 9 0 0 1 9 18 H5 V32 H0 Z M5 5 H9 A4 4 0 0 1 9 13 H5 Z" />
+      </g>
+    </svg>
+  )
+}

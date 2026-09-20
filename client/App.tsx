@@ -18,6 +18,7 @@ import { CriteriaAccordion } from './components/mobile/CriteriaAccordion.tsx'
 import { Composer } from './components/mobile/Composer.tsx'
 import { ChatSheet } from './components/mobile/ChatSheet.tsx'
 import { Logo } from './components/Logo.tsx'
+import { LogoMark } from './components/LogoMark.tsx'
 import { SessionsSidebar } from './components/SessionsSidebar.tsx'
 
 export function App() {
@@ -123,7 +124,8 @@ export function App() {
         <div className="flex h-screen flex-col overflow-hidden bg-surface-warm">
           <div className="flex shrink-0 items-stretch border-b border-surface-warm-border bg-surface-warm-card">
             {historyButton}
-            <div className="flex min-w-0 flex-1 items-center px-3 py-2.5">
+            <div className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2.5">
+              <LogoMark className="size-7 shrink-0" />
               <span className="text-body-xs tracking-[0.02em] text-text-subtle">New search</span>
             </div>
           </div>
@@ -410,7 +412,8 @@ function Header({ query, onReset }: { query?: string; onReset?: () => void }) {
   return (
     <header className="shrink-0 border-b border-surface-warm-border bg-surface-warm/85 backdrop-blur">
       <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-5 py-3">
-        <Logo className="h-6 w-auto shrink-0" />
+        <LogoMark className="size-7 shrink-0 lg:hidden" />
+        <Logo className="hidden h-6 w-auto shrink-0 lg:block" />
         {query && (
           <p className="min-w-0 flex-1 truncate text-body-sm text-text-subtle" title={query}>
             {query}
