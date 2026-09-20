@@ -72,6 +72,29 @@ The Docker image is multi-stage, runs as a non-root user, and keeps session stat
 volume so a restart does not lose your searches. `NODE_ENV=production` there also disables the
 fault-injection hooks described below.
 
+<details>
+<summary><code>EADDRINUSE: address already in use 0.0.0.0:3539</code></summary>
+
+Something already holds the port — usually a container from the Docker quick start still running in
+the background. Find it and stop it:
+
+```bash
+lsof -nP -iTCP:3539 -sTCP:LISTEN        # what has the port
+docker ps --filter publish=3539         # if it is a container, this names it
+docker stop <name>                      # then stop it
+```
+
+Or just run the two side by side on different ports:
+
+```bash
+PORT=3540 npm run dev -- --key=your_key_here
+```
+
+Worth knowing which one you are talking to: the container runs with
+`NODE_ENV=production`, so the `?fault=` hooks below are disabled there. Record the
+failure-and-recovery moment against `npm run dev`.
+</details>
+
 ---
 
 ## The loop
