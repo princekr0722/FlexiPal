@@ -1,0 +1,49 @@
+# ── dependencies ────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── build output ────────────────────────────────────────────────
+dist/
+build/
+.vite/
+*.tsbuildinfo
+
+# ── secrets ─────────────────────────────────────────────────────
+# .env.example IS committed; it documents GEMINI_API_KEY without a value.
+.env
+.env.*
+!.env.example
+
+# ── session state (SQLite) ──────────────────────────────────────
+# Written at runtime on the machine running the app. Never part of the repo.
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# ── logs & caches ───────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-error.log*
+.cache/
+coverage/
+.nyc_output/
+
+# ── editor & OS ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+.vscode/*
+!.vscode/extensions.json
+
+# ── assignment source material, not part of the deliverable ─────
+requirement.md
+*.pdf
+
+# Working status, regenerated as the build proceeds
+progress.md
