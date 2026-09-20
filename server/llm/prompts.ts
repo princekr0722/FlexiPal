@@ -11,10 +11,13 @@ const promptDir = resolve(dirname(dirname(dirname(fileURLToPath(import.meta.url)
  * prompt edits take effect without a restart.
  */
 const cache = new Map<string, string>()
-const dev = process.env.NODE_ENV !== 'production'
+
+// Read lazily. ESM hoists imports, so a module-scope read here would run before
+// server/index.ts has had a chance to set NODE_ENV from the --dev flag.
+const isDev = () => process.env.NODE_ENV !== 'production'
 
 function load(name: string): string {
-  if (!dev && cache.has(name)) return cache.get(name)!
+  if (!isDev() && cache.has(name)) return cache.get(name)!
   let text: string
   try {
     text = readFileSync(join(promptDir, `${name}.md`), 'utf8')

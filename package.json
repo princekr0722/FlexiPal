@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=.env --clear-screen=false server/index.ts --dev",
     "build": "vite build",
-    "start": "NODE_ENV=production tsx --env-file-if-exists=.env server/index.ts",
+    "start": "tsx --env-file-if-exists=.env server/index.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx scripts/check-schema.ts && tsx scripts/check-filters.ts && tsx scripts/check-evidence.ts && tsx scripts/check-session.ts"
   },

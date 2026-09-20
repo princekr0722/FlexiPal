@@ -6,18 +6,28 @@ import { apiRoutes } from './routes/index.ts'
 import { buildServices } from './services.ts'
 
 /**
- * The key can arrive three ways, in this order of precedence:
- *   npm run dev -- --key=AI...     (nothing to create, nothing to edit)
- *   GEMINI_API_KEY=AI... npm run dev
- *   a .env file, if you would rather keep it around
+ * Configuration comes from flags first, then the environment, then .env.
+ *
+ * Flags exist because `FOO=bar npm run x` is a POSIX shell idiom that does not
+ * work in cmd.exe or PowerShell. `--key=` and `--port=` behave identically on
+ * macOS, Linux and Windows.
  */
-const keyArg = process.argv.find((a) => a.startsWith('--key='))
-if (keyArg) process.env.GEMINI_API_KEY = keyArg.slice('--key='.length)
+const flag = (name: string): string | undefined => {
+  const hit = process.argv.find((a) => a.startsWith(`--${name}=`))
+  return hit?.slice(name.length + 3)
+}
+
+const keyArg = flag('key')
+if (keyArg) process.env.GEMINI_API_KEY = keyArg
+
+// `--dev` is the signal, not NODE_ENV, so `npm start` needs no env prefix.
+const isDev = process.argv.includes('--dev')
+process.env.NODE_ENV = isDev ? (process.env.NODE_ENV ?? 'development') : 'production'
 
 const rootDir = dirname(dirname(fileURLToPath(import.meta.url)))
-const dev = process.argv.includes('--dev') || process.env.NODE_ENV !== 'production'
+const dev = isDev
 // 3539 = FLEX on a phone keypad. Deliberately off the common 3000/5173/8080 lanes.
-const port = Number(process.env.PORT ?? 3539)
+const port = Number(flag('port') ?? process.env.PORT ?? 3539)
 
 const app = Fastify({ logger: { level: dev ? 'warn' : 'info' } })
 

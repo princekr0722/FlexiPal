@@ -39,18 +39,32 @@ npm install
 npm run dev -- --key=your_key_here
 ```
 
+That command is identical on macOS, Linux, Windows PowerShell and cmd.exe — the key is a flag
+precisely so you never need `FOO=bar cmd`, which is POSIX-shell-only.
+
 Either way, open **http://localhost:3539/ui**.
 
 <details>
 <summary>Other ways to supply the key</summary>
 
+The variable is **`GEMINI_API_KEY`**. `--key=` wins over the environment, which wins over `.env`.
+
 ```bash
-GEMINI_API_KEY=your_key_here npm run dev   # environment variable
-cp .env.example .env                       # or a .env file, if you prefer one
+# macOS / Linux
+GEMINI_API_KEY=your_key_here npm run dev
+
+# Windows PowerShell
+$env:GEMINI_API_KEY="your_key_here"; npm run dev
+
+# Windows cmd.exe
+set GEMINI_API_KEY=your_key_here && npm run dev
 ```
 
-The variable is **`GEMINI_API_KEY`**. `--key=` wins over the environment, which wins over `.env`.
+Or keep a `.env` file — `cp .env.example .env` on macOS/Linux, `copy .env.example .env` on Windows.
 Everything else is optional and documented in [`.env.example`](.env.example).
+
+Docker Compose reads `GEMINI_API_KEY` from your shell or from a `.env` beside `docker-compose.yml`.
+On Windows, the `.env` file is the simpler route; `docker run -e GEMINI_API_KEY=...` works everywhere.
 </details>
 
 ---
@@ -63,10 +77,12 @@ override with `PORT`.
 
 | command | what it does |
 |---|---|
-| `npm run dev -- --key=…` | Fastify + Vite in middleware mode — one process, HMR |
+| `npm run dev -- --key=… [--port=…]` | Fastify + Vite in middleware mode — one process, HMR |
 | `npm test` | 42 offline tests (no API key needed, no network) |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run build` then `npm start` | production build, served by the same server |
+
+Every script is shell-agnostic: no command in this repo relies on a POSIX-only `FOO=bar cmd` prefix.
 
 The Docker image is multi-stage, runs as a non-root user, and keeps session state on a `/data`
 volume so a restart does not lose your searches. `NODE_ENV=production` there also disables the
@@ -76,23 +92,38 @@ fault-injection hooks described below.
 <summary><code>EADDRINUSE: address already in use 0.0.0.0:3539</code></summary>
 
 Something already holds the port — usually a container from the Docker quick start still running in
-the background. Find it and stop it:
+the background.
 
 ```bash
-lsof -nP -iTCP:3539 -sTCP:LISTEN        # what has the port
-docker ps --filter publish=3539         # if it is a container, this names it
-docker stop <name>                      # then stop it
+docker ps --filter publish=3539     # any OS: is it a container? this names it
+docker stop <name>
 ```
 
-Or just run the two side by side on different ports:
+If it is not a container:
 
 ```bash
-PORT=3540 npm run dev -- --key=your_key_here
+# macOS / Linux
+lsof -nP -iTCP:3539 -sTCP:LISTEN
+kill <pid>
+
+# Windows PowerShell
+Get-NetTCPConnection -LocalPort 3539 | Select-Object OwningProcess
+Stop-Process -Id <pid>
+
+# Windows cmd.exe
+netstat -ano | findstr :3539
+taskkill /PID <pid> /F
 ```
 
-Worth knowing which one you are talking to: the container runs with
-`NODE_ENV=production`, so the `?fault=` hooks below are disabled there. Record the
-failure-and-recovery moment against `npm run dev`.
+Or sidestep it entirely and run both at once — `--port` works on every shell:
+
+```bash
+npm run dev -- --key=your_key_here --port=3540
+```
+
+Worth knowing which one you are talking to: the container runs with `NODE_ENV=production`, so the
+`?fault=` hooks below are disabled there. Record the failure-and-recovery moment against
+`npm run dev`.
 </details>
 
 ---
